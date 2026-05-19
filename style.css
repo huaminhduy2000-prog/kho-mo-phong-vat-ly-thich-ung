@@ -1,0 +1,251 @@
+/* --- Thiết lập cơ bản & Fonts --- */
+:root {
+    --chat-primary-color: #0084ff;
+    --chat-bubble-size: 55px;
+    --chatbox-width: 340px;
+    --chatbox-height: 420px;
+    --chat-offset: 25px;
+    --header-height: 60px;
+    --footer-height: 40px;
+    --primary-bg: #f4f7f6;
+    --accent-color: #1a73e8;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; 
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: var(--primary-bg);
+    font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+/* --- Main Header --- */
+.main-header {
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    height: var(--header-height);
+    position: relative;
+    z-index: 100;
+}
+.logo {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 1px;
+}
+.main-nav { display: flex; align-items: center; }
+.main-nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    font-size: 0.95em;
+    cursor: pointer;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+.main-nav a:hover { color: white; background-color: var(--accent-color); border-color: var(--accent-color); }
+
+/* --- Portal Content Layout --- */
+.portal-banner {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.portal-banner h1 { margin: 0 0 10px 0; font-size: 1.8rem; font-weight: 700; }
+.portal-banner p { margin: 0 auto; max-width: 800px; font-size: 1rem; opacity: 0.9; line-height: 1.4; }
+
+.portal-container {
+    height: calc(100vh - var(--header-height) - var(--footer-height) - 180px);
+    overflow-y: auto;
+    padding: 40px 20px;
+}
+.labs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- Simulation Cards Design --- */
+.lab-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.lab-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.lab-thumb {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.color-1 { background: linear-gradient(45deg, #fe8c00, #f83600); }
+.color-2 { background: linear-gradient(45deg, #00c6ff, #0072ff); }
+.color-3 { background: linear-gradient(45deg, #11998e, #38ef7d); }
+.lab-icon { font-size: 3.5rem; }
+.lab-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+.lab-info h3 { margin: 0 0 10px 0; color: #222; font-size: 1.2rem; }
+.lab-info p { margin: 0 0 20px 0; color: #666; font-size: 0.9em; line-height: 1.5; flex-grow: 1; }
+.enter-lab-btn {
+    display: block; width: 100%; text-align: center; background-color: #222; color: white;
+    text-decoration: none; padding: 10px; border-radius: 6px; font-weight: 500;
+    transition: background-color 0.2s; border: none; cursor: pointer; font-size: 0.95em;
+}
+.enter-lab-btn:hover { background-color: var(--accent-color); }
+.lab-card.locked { opacity: 0.75; }
+.lab-card.locked:hover { transform: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.lab-card.locked .enter-lab-btn { background-color: #bbb; cursor: not-allowed; }
+
+/* --- Lab Room Individual Screen Layout --- */
+.lab-header {
+    height: var(--header-height); background: #ffffff; border-bottom: 1px solid #e0e0e0;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
+}
+.lab-header-left { display: flex; align-items: center; }
+.back-portal-btn {
+    text-decoration: none; color: #555; border: 1px solid #ccc; padding: 6px 12px;
+    border-radius: 4px; font-size: 0.85em; font-weight: 500; margin-right: 15px; transition: all 0.2s;
+}
+.back-portal-btn:hover { background: #f5f5f5; color: #111; border-color: #999; }
+.lab-header h2 { margin: 0; font-size: 1.1rem; color: #222; font-weight: 700; }
+.lab-status { font-size: 0.85em; color: #2ed573; font-weight: 500; }
+
+.lab-workspace {
+    height: calc(100vh - var(--header-height)); width: 100%; background-color: #111;
+}
+.lab-iframe { width: 100%; height: 100%; border: none; display: block; }
+
+/* --- Mobile Navigation Hamburger --- */
+#hamburger-btn {
+    display: none; flex-direction: column; justify-content: space-around;
+    width: 25px; height: 20px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 200;
+}
+#hamburger-btn span { width: 100%; height: 3px; background-color: #333; border-radius: 2px; transition: all 0.3s; }
+.mobile-nav {
+    display: none; position: fixed; inset: 0; background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(5px); z-index: 150; flex-direction: column; align-items: center; justify-content: center;
+}
+.mobile-nav-link { font-size: 1.3rem; color: #333; text-decoration: none; font-weight: 500; padding: 15px 0; width: 80%; text-align: center; border-bottom: 1px solid #eee; }
+.mobile-nav.is-active { display: flex; }
+#hamburger-btn.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+#hamburger-btn.is-active span:nth-child(2) { opacity: 0; }
+#hamburger-btn.is-active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* --- Modal Overlay CSS --- */
+.modal-overlay {
+    display: none; position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.65);
+    z-index: 2000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s;
+}
+.modal-content {
+    background-color: #fff; padding: 35px 45px; border-radius: 10px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    position: relative; max-width: 420px; width: 90%; text-align: center; transform: scale(0.95); transition: transform 0.3s;
+}
+.modal-overlay.show { display: flex; opacity: 1; }
+.modal-overlay.show .modal-content { transform: scale(1); }
+.modal-content h2 { color: #222; margin-top: 0; margin-bottom: 25px; font-weight: 500; }
+.modal-content ul { list-style: none; padding: 0; margin: 0; text-align: left; }
+.modal-content li { margin-bottom: 14px; color: #555; font-size: 1em; }
+.modal-content li strong { display: inline-block; min-width: 140px; color: #111; font-weight: 500;}
+.modal-content a { color: var(--chat-primary-color); text-decoration: none; }
+.close-button { position: absolute; top: 12px; right: 18px; background: none; border: none; font-size: 2.2rem; color: #bbb; cursor: pointer; line-height: 1; }
+.close-button:hover { color: #555; }
+
+/* --- Widget Bong bóng Chat Nổi --- */
+#ai-chat-widget { position: fixed; bottom: var(--chat-offset); right: var(--chat-offset); z-index: 1000; }
+#ai-chat-bubble {
+    width: var(--chat-bubble-size); height: var(--chat-bubble-size); background-color: var(--chat-primary-color);
+    border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25); transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, opacity 0.3s ease-out; outline: none;
+}
+#ai-chat-bubble:hover { transform: scale(1.1); }
+#ai-chat-bubble svg { width: 50%; height: 50%; fill: white; }
+#ai-chat-box {
+    width: var(--chatbox-width); height: var(--chatbox-height); background-color: #ffffff; border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); position: absolute; bottom: calc(var(--chat-bubble-size) + 12px); right: 0;
+    display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(20px) scale(0.95);
+    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 0.3s;
+    visibility: hidden; pointer-events: none;
+}
+#ai-chat-widget.chat-open #ai-chat-box {
+    opacity: 1; transform: translateY(0) scale(1); visibility: visible; pointer-events: auto;
+    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 0s;
+}
+#ai-chat-widget.chat-open #ai-chat-bubble { opacity: 0; transform: scale(0.8); pointer-events: none; }
+.ai-chat-header { background-color: var(--chat-primary-color); color: white; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.ai-chat-header h3 { margin: 0; font-size: 1rem; font-weight: 500; }
+#ai-chat-close-btn { background: none; border: none; color: white; font-size: 1.6rem; cursor: pointer; padding: 0 5px; line-height: 1; opacity: 0.8; }
+.chat-messages-area { flex-grow: 1; padding: 15px; overflow-y: auto; background-color: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
+.ai-message, .user-message { padding: 10px 15px; border-radius: 20px; line-height: 1.45; font-size: 0.9em; max-width: 85%; word-wrap: break-word; box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.12); position: relative; }
+.ai-message { background-color: #e4e6eb; color: #1c1e21; align-self: flex-start; border-bottom-left-radius: 5px; }
+.user-message { background-color: var(--chat-primary-color); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
+
+.typing-indicator { background-color: #e4e6eb; padding: 12px 15px; border-bottom-left-radius: 5px; align-self: flex-start; display: flex; align-items: center; justify-content: center; width: fit-content; }
+.typing-indicator span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background-color: #8a8d91; margin: 0 2.5px; animation: typing-blink 1.4s infinite both; }
+.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing-blink { 0%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+
+#chat-input-area { display: flex; padding: 12px 15px; border-top: 1px solid #e0e0e0; background: #ffffff; flex-shrink: 0; align-items: center; }
+#user-input { flex-grow: 1; border: none; background-color: #f0f2f5; border-radius: 20px; padding: 10px 18px; font-size: 0.9em; outline: none; }
+#user-input:focus { background-color: #e4e6eb; }
+#mic-button { background-color: #f0f2f5; color: #555; border: none; border-radius: 50%; width: 38px; height: 38px; margin-left: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3em; flex-shrink: 0; padding: 0; }
+#mic-button.is-recording { background-color: #ff4136; color: white; }
+#send-button { background-color: var(--chat-primary-color); color: white; border: none; border-radius: 50%; width: 38px; height: 38px; margin-left: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; }
+#send-button svg { margin-left: 2px; width: 18px; height: 18px; }
+
+/* --- Footer --- */
+.main-footer { height: var(--footer-height); background-color: #333; color: #aaa; display: flex; align-items: center; justify-content: center; font-size: 0.85em; }
+.main-footer p { margin: 0; }
+
+/* --- Responsive Layout cho Mobile --- */
+@media (max-width: 768px) {
+    .main-header { padding: 0 15px; height: 50px; }
+    .logo { font-size: 1em; }
+    .main-nav { display: none; }
+    #hamburger-btn { display: flex; }
+    
+    .portal-banner { padding: 20px 15px; height: 140px; }
+    .portal-banner h1 { font-size: 1.4rem; }
+    .portal-banner p { font-size: 0.85rem; }
+    
+    .portal-container { height: calc(100vh - 50px - 40px - 140px); padding: 20px 10px; }
+    .labs-grid { grid-template-columns: 1fr; gap: 20px; }
+    
+    /* Thiết kế cho phòng thí nghiệm ảo trên di động */
+    .lab-header { height: 50px; padding: 0 10px; }
+    .lab-header h2 { font-size: 0.95rem; }
+    .back-portal-btn { padding: 4px 8px; font-size: 0.8em; margin-right: 8px; }
+    .lab-status { font-size: 0.75em; }
+    .lab-workspace { height: calc(100vh - 50px); }
+
+    /* Chat Widget di động */
+    :root { --chat-offset: 15px; --chat-bubble-size: 50px; --chatbox-width: calc(100vw - 30px); --chatbox-height: calc(100dvh - 120px); }
+    #ai-chat-box { bottom: calc(var(--chat-bubble-size) + 8px); right: calc(var(--chat-offset) * -1 + (100vw - var(--chatbox-width))/2); border-radius: 15px; }
+    .chat-messages-area { padding: 10px; }
+    #chat-input-area { padding: 8px 10px; }
+    #user-input { padding: 9px 15px; }
+    #mic-button, #send-button { width: 36px; height: 36px; margin-left: 5px; }
+}
