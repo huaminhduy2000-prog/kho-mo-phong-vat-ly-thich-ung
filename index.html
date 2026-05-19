@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kho Mô Phỏng Vật Lý AI</title>
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">KHO MÔ PHỎNG VẬT LÝ AI</div>
+        <nav class="main-nav">
+            <a href="#" id="contact-link">Liên hệ trợ giúp</a>
+        </nav>
+        <button id="hamburger-btn" aria-label="Mở menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <nav id="mobile-nav" class="mobile-nav">
+        <a href="#" id="contact-link-mobile" class="mobile-nav-link">Liên hệ trợ giúp</a>
+    </nav>
+
+    <div class="portal-banner">
+        <h1>Phòng Thí Nghiệm Vật Lý Ảo Tương Tác</h1>
+        <p>Khám phá các hiện tượng vật lý trực quan thông qua mô phỏng đồ họa sinh động và sự hỗ trợ từ Trợ giảng Trí tuệ Nhân tạo.</p>
+    </div>
+
+    <div class="portal-container">
+        <div class="labs-grid">
+            
+            <div class="lab-card">
+                <div class="lab-thumb color-1">
+                    <span class="lab-icon">🎯</span>
+                </div>
+                <div class="lab-info">
+                    <h3>Chuyển Động Ném Xiên</h3>
+                    <p>Phân tích quỹ đạo parabol, khảo sát tầm bay xa, tầm bay cao và hệ vector gia tốc tiếp tuyến/pháp tuyến.</p>
+                    <a href="lab-nem-xien.html" class="enter-lab-btn">Vào Thí Nghiệm →</a>
+                </div>
+            </div>
+
+            <div class="lab-card locked">
+                <div class="lab-thumb color-2">
+                    <span class="lab-icon">🌀</span>
+                </div>
+                <div class="lab-info">
+                    <h3>Dao Động Con Lắc Lò Xo</h3>
+                    <p>Khảo sát dao động điều hòa, lực đàn hồi, sự biến đổi động năng và thế năng theo thời gian.</p>
+                    <button class="enter-lab-btn" disabled>Đang phát triển...</button>
+                </div>
+            </div>
+
+            <div class="lab-card locked">
+                <div class="lab-thumb color-3">
+                    <span class="lab-icon">🌈</span>
+                </div>
+                <div class="lab-info">
+                    <h3>Khúc Xạ Ánh Sáng</h3>
+                    <p>Minh họa định luật Snell, hiện tượng phản xạ toàn phần và khảo sát chiết suất của các môi trường.</p>
+                    <button class="enter-lab-btn" disabled>Đang phát triển...</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="close-button" aria-label="Đóng">&times;</button>
+            <h2>Thông tin hỗ trợ</h2>
+            <ul>
+                <li><strong>Tên tác giả:</strong> Hứa Duy Minh</li>
+                <li><strong>Số điện thoại:</strong> <a href="tel:0918678616">0918678616</a></li>
+                <li><strong>Email:</strong> <a href="mailto:huaduyminh2007@gmail.com">huaduyminh2007@gmail.com</a></li>
+                <li><strong>Zalo:</strong> 0819670487</li>
+                <li><strong>Giảng viên hướng dẫn:</strong> Nguyễn Đăng Nhật</li>
+            </ul>
+        </div>
+    </div> 
+
+    <footer class="main-footer">
+        <p>© 2025 Kho Mô Phỏng Vật Lý AI. Phát triển bởi Minh Hua.</p>
+    </footer>
+
+    <script src="chat.js"></script>
+</body>
+</html>
