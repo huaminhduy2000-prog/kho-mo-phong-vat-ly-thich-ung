@@ -4,51 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lab Vật lý: Mô phỏng Ném xiên Tổng quát</title>
-    
-    <!-- Tailwind CSS 4 CDN -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <link rel="stylesheet" href="style.css">
     <style>
-        /* Tùy chỉnh thanh trượt để giống phong cách PhET/Vibrant */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-        }
-        input[type="range"]::-webkit-slider-runnable-track {
-            background: #e2e8f0;
-            height: 0.5rem;
-            border-radius: 9999px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            margin-top: -0.25rem;
-            background-color: #3b82f6;
-            height: 1rem;
-            width: 1rem;
-            border-radius: 9999px;
-            border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+        input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
+        input[type="range"]::-webkit-slider-runnable-track { background: #e2e8f0; height: 0.5rem; border-radius: 9999px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -0.25rem; background-color: #3b82f6; height: 1rem; width: 1rem; border-radius: 9999px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body class="m-0 p-0 h-screen w-screen overflow-hidden bg-[#222] font-sans text-slate-800 flex flex-col">
 
-    <!-- Header Section -->
     <header class="h-14 bg-slate-900 flex items-center justify-between px-6 border-b border-slate-700 shrink-0">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-lg shadow-sky-500/20">
-                <i data-lucide="zap" class="w-5 h-5 text-white"></i>
-            </div>
-            <h1 class="text-white font-bold text-lg tracking-tight">Lab Vật lý: Mô phỏng Ném xiên Tổng quát</h1>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="flex items-center gap-1 text-slate-300 hover:text-white border border-slate-600 hover:border-slate-400 px-3 py-1.5 rounded-lg text-xs font-bold transition-all no-underline bg-slate-800/50">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> RỜI PHÒNG THÍ NGHIỆM
+            </a>
+            <div class="w-px h-5 bg-slate-700"></div>
+            <h1 class="text-white font-bold text-base tracking-tight">Thí nghiệm: Mô phỏng Ném xiên Tổng quát</h1>
         </div>
         <div class="flex gap-4">
             <div class="bg-slate-800 px-3 py-1 rounded text-xs font-mono text-slate-400 border border-slate-700 select-none uppercase">v2.5.0-Standalone</div>
@@ -56,375 +30,101 @@
     </header>
 
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden p-2 gap-2">
-        <!-- Simulation World (Left) -->
         <div id="sim-container" class="flex-1 relative rounded-xl overflow-hidden bg-gradient-to-b from-[#87CEEB] to-[#add8e6] border-2 border-slate-900 shadow-2xl">
             <canvas id="canvas" class="block w-full h-full"></canvas>
-
-            <!-- Sky Clouds Decor -->
             <div class="absolute top-12 left-20 w-32 h-10 bg-white/40 rounded-full blur-xl animate-pulse"></div>
             <div class="absolute top-24 right-40 w-48 h-12 bg-white/40 rounded-full blur-xl animate-pulse" style="animation-delay: 1s"></div>
 
-            <!-- Mini Chart Overlay -->
             <div class="absolute top-4 right-4 w-64 lg:w-80 bg-white/90 backdrop-blur rounded-lg shadow-xl border border-slate-200 p-3 z-10 transition-all hover:bg-white">
                 <div class="flex items-center gap-2 text-[10px] uppercase font-black text-slate-400 mb-2 tracking-widest">
-                    <i data-lucide="line-chart" class="w-3 h-3"></i>
-                    Quỹ đạo thời gian thực
+                    <i data-lucide="line-chart" class="w-3 h-3"></i> Quỹ đạo thời gian thực
                 </div>
-                <div class="h-32 lg:h-44 relative">
-                    <canvas id="chartCanvas"></canvas>
-                </div>
+                <div class="h-32 lg:h-44 relative"><canvas id="chartCanvas"></canvas></div>
             </div>
 
-            <!-- Bottom Stats Hud -->
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4">
                 <div class="bg-slate-900/90 backdrop-blur-md px-8 py-3 rounded-2xl border border-white/20 flex gap-10 shadow-2xl">
-                    <div class="flex flex-col">
-                        <span class="text-sky-300 text-[10px] uppercase font-black tracking-widest mb-1">Tầm xa (m)</span>
-                        <span id="stat-range" class="text-white text-3xl font-mono leading-none tracking-tighter">0.00</span>
-                    </div>
+                    <div class="flex flex-col"><span class="text-sky-300 text-[10px] uppercase font-black tracking-widest mb-1">Tầm xa (m)</span><span id="stat-range" class="text-white text-3xl font-mono leading-none tracking-tighter">0.00</span></div>
                     <div class="w-px h-10 bg-white/10 self-center"></div>
-                    <div class="flex flex-col">
-                        <span class="text-sky-300 text-[10px] uppercase font-black tracking-widest mb-1">H max (m)</span>
-                        <span id="stat-height" class="text-white text-3xl font-mono leading-none tracking-tighter">0.00</span>
-                    </div>
+                    <div class="flex flex-col"><span class="text-sky-300 text-[10px] uppercase font-black tracking-widest mb-1">H max (m)</span><span id="stat-height" class="text-white text-3xl font-mono leading-none tracking-tighter">0.00</span></div>
                     <div class="w-px h-10 bg-white/10 self-center"></div>
-                    <div class="flex flex-col">
-                        <span class="text-sky-300 text-[10px] uppercase font-black tracking-widest mb-1">Thời gian (s)</span>
-                        <span id="stat-time" class="text-white text-3xl font-mono leading-none tracking-tighter">0.00</span>
-                    </div>
+                    <div class="flex flex-col"><span class="text-sky-300 text-[10px] uppercase font-black tracking-widest mb-1">Thời gian (s)</span><span id="stat-time" class="text-white text-3xl font-mono leading-none tracking-tighter">0.00</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- Control Panel (Right) -->
         <aside class="w-full lg:w-[350px] flex flex-col gap-3 bg-[#ececec] p-4 rounded-xl border border-slate-300 overflow-y-auto shrink-0">
             <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
                 <h2 class="text-[#2980b9] font-black text-xs mb-5 border-b-2 border-sky-400 pb-1 uppercase tracking-widest flex items-center gap-2">
-                    <i data-lucide="settings-2" class="w-4 h-4"></i>
-                    Thiết lập Súng đại bác
+                    <i data-lucide="settings-2" class="w-4 h-4"></i> Thiết lập Súng đại bác
                 </h2>
-                
                 <div class="space-y-6">
                     <div>
-                        <div class="flex justify-between items-end mb-1.5 px-0.5">
-                            <label class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">Góc bắn (θ)</label>
-                            <span id="val-angle" class="text-orange-500 font-mono font-black text-sm tracking-tighter">45°</span>
-                        </div>
+                        <div class="flex justify-between items-end mb-1.5 px-0.5"><label class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">Góc bắn (θ)</label><span id="val-angle" class="text-orange-500 font-mono font-black text-sm tracking-tighter">45°</span></div>
                         <input type="range" id="angle" min="-90" max="90" value="45" class="w-full">
                     </div>
-
                     <div>
-                        <div class="flex justify-between items-end mb-1.5 px-0.5">
-                            <label class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">Vận tốc đầu (v₀)</label>
-                            <span id="val-v0" class="text-orange-500 font-mono font-black text-sm tracking-tighter">20 m/s</span>
-                        </div>
+                        <div class="flex justify-between items-end mb-1.5 px-0.5"><label class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">Vận tốc đầu (v₀)</label><span id="val-v0" class="text-orange-500 font-mono font-black text-sm tracking-tighter">20 m/s</span></div>
                         <input type="range" id="v0" min="5" max="60" value="20" class="w-full">
                     </div>
-
                     <div>
-                        <div class="flex justify-between items-end mb-1.5 px-0.5">
-                            <label class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">Độ cao (h)</label>
-                            <span id="val-h" class="text-orange-500 font-mono font-black text-sm tracking-tighter">15 m</span>
-                        </div>
+                        <div class="flex justify-between items-end mb-1.5 px-0.5"><label class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">Độ cao (h)</label><span id="val-h" class="text-orange-500 font-mono font-black text-sm tracking-tighter">15 m</span></div>
                         <input type="range" id="h" min="0" max="50" value="15" class="w-full">
                     </div>
-
                     <div class="grid grid-cols-2 gap-4 pt-3">
-                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200">
-                            <label class="text-[9px] font-black block mb-1 uppercase text-slate-500 tracking-tighter">Khối lượng (kg)</label>
-                            <input type="number" id="mass" value="2.0" step="0.5" min="0.5" class="w-full bg-transparent text-sm font-mono font-bold text-slate-800 outline-none">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200">
-                            <label class="text-[9px] font-black block mb-1 uppercase text-slate-500 tracking-tighter">Lực cản (k)</label>
-                            <input type="number" id="dragK" value="0.10" step="0.05" min="0" class="w-full bg-transparent text-sm font-mono font-bold text-slate-800 outline-none">
-                        </div>
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200"><label class="text-[9px] font-black block mb-1 uppercase text-slate-500 tracking-tighter">Khối lượng (kg)</label><input type="number" id="mass" value="2.0" step="0.5" min="0.5" class="w-full bg-transparent text-sm font-mono font-bold text-slate-800 outline-none"></div>
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200"><label class="text-[9px] font-black block mb-1 uppercase text-slate-500 tracking-tighter">Lực cản (k)</label><input type="number" id="dragK" value="0.10" step="0.05" min="0" class="w-full bg-transparent text-sm font-mono font-bold text-slate-800 outline-none"></div>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4 mt-8">
-                    <button id="startBtn" class="bg-[#27ae60] text-white font-black py-4 rounded-xl shadow-[0_5px_0_#1e8449] active:shadow-none active:translate-y-[5px] transition-all flex flex-col items-center justify-center">
-                        <span id="startBtnSub" class="text-[10px] opacity-80 uppercase tracking-tighter mb-0.5">Khai hỏa</span>
-                        <span id="startBtnMain" class="text-lg uppercase">BẮN!</span>
-                    </button>
-                    <button id="resetBtn" class="bg-[#e74c3c] text-white font-black py-4 rounded-xl shadow-[0_5px_0_#c0392b] active:shadow-none active:translate-y-[5px] transition-all flex flex-col items-center justify-center">
-                        <span class="text-[10px] opacity-80 uppercase tracking-tighter mb-0.5">Xóa hết</span>
-                        <span class="text-lg">LÀM MỚI</span>
-                    </button>
+                    <button id="startBtn" class="bg-[#27ae60] text-white font-black py-4 rounded-xl shadow-[0_5px_0_#1e8449] active:shadow-none active:translate-y-[5px] transition-all flex flex-col items-center justify-center"><span id="startBtnSub" class="text-[10px] opacity-80 uppercase tracking-tighter mb-0.5">Khai hỏa</span><span id="startBtnMain" class="text-lg uppercase">BẮN!</span></button>
+                    <button id="resetBtn" class="bg-[#e74c3c] text-white font-black py-4 rounded-xl shadow-[0_5px_0_#c0392b] active:shadow-none active:translate-y-[5px] transition-all flex flex-col items-center justify-center"><span class="text-[10px] opacity-80 uppercase tracking-tighter mb-0.5">Xóa hết</span><span class="text-lg">LÀM MỚI</span></button>
                 </div>
             </div>
 
-            <!-- Quiz Section -->
             <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-                <h2 class="text-amber-600 font-bold text-sm mb-3 flex items-center gap-2">
-                    <i data-lucide="trophy" class="w-4 h-4"></i>
-                    Thử thách Vật lý
-                </h2>
+                <h2 class="text-amber-600 font-bold text-sm mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4"></i> Thử thách Vật lý</h2>
                 <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
-                    <p class="text-xs leading-relaxed text-slate-700 font-medium">
-                        <b>?</b> Khi có <b>lực cản không khí</b> (k > 0), góc bắn tối ưu để đạt tầm xa cực đại sẽ như thế nào so với môi trường chân không?
-                    </p>
+                    <p class="text-xs leading-relaxed text-slate-700 font-medium"><b>?</b> Khi có <b>lực cản không khí</b> (k > 0), góc bắn tối ưu để đạt tầm xa cực đại sẽ như thế nào so với môi trường chân không?</p>
                     <div class="mt-4 space-y-2">
                         <button onclick="checkQuiz(false, this)" class="quiz-opt w-full text-left bg-white border border-slate-200 p-2.5 rounded-lg text-[11px] transition-all hover:border-sky-400 font-medium">A. Lớn hơn 45 độ</button>
                         <button onclick="checkQuiz(true, this)" class="quiz-opt w-full text-left bg-white border border-slate-200 p-2.5 rounded-lg text-[11px] transition-all hover:border-sky-400 font-medium">B. Nhỏ hơn 45 độ</button>
                     </div>
-                    <div id="quizFeedback" class="hidden mt-3 bg-emerald-100 border border-emerald-200 text-emerald-800 text-[10px] p-2.5 rounded-lg italic leading-tight">
-                        <b>Chính xác!</b> Lực cản làm giảm vận tốc nhanh hơn. Một góc bắn thấp giúp vật duy trì vận tốc theo phương ngang hiệu quả hơn trong giai đoạn đầu.
-                    </div>
+                    <div id="quizFeedback" class="hidden mt-3 bg-emerald-100 border border-emerald-200 text-emerald-800 text-[10px] p-2.5 rounded-lg italic leading-tight"><b>Chính xác!</b> Lực cản làm giảm vận tốc nhanh hơn. Một góc bắn thấp giúp vật duy trì vận tốc theo phương ngang hiệu quả hơn trong giai đoạn đầu.</div>
                 </div>
             </div>
         </aside>
     </main>
 
-    <!-- Footer Toolbar -->
-    <footer class="h-8 bg-slate-900 px-6 flex items-center justify-between shrink-0">
-        <div class="flex items-center gap-3">
-            <div id="statusDot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-            <span class="text-[10px] text-slate-400 uppercase tracking-widest font-black select-none">Simulation Ready</span>
+    <footer class="h-8 bg-slate-900 px-6 flex items-center justify-between shrink-0"><div class="flex items-center gap-3"><div id="statusDot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div><span class="text-[10px] text-slate-400 uppercase tracking-widest font-black select-none">Simulation Ready</span></div><div class="text-[10px] text-slate-500 font-medium select-none">Trục X: Mét | Trục Y: Mét | Đơn vị G: 9.81 m/s²</div></footer>
+
+    <div id="ai-chat-widget">
+        <button id="ai-chat-bubble" aria-label="Mở AI Chat">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+        </button>
+        <div id="ai-chat-box">
+            <div class="ai-chat-header"><h3>AI Trợ Giảng Vật Lý</h3><button id="ai-chat-close-btn" aria-label="Đóng Chat">&times;</button></div>
+            <div id="chat-window" class="chat-messages-area"><p class="ai-message">Chào Minh Duy! Mình là Trợ giảng AI. Bạn có thắc mắc gì về các thông số góc bắn hay lực cản không khí trong mô phỏng Ném Xiên này không?</p></div>
+            <div id="chat-input-area">
+                <input type="text" id="user-input" placeholder="Hỏi AI Trợ giảng...">
+                <button id="mic-button" aria-label="Nói">🎙️</button>
+                <button id="send-button" aria-label="Gửi"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/></svg></button>
+            </div>
         </div>
-        <div class="text-[10px] text-slate-500 font-medium select-none">Trục X: Mét | Trục Y: Mét | Đơn vị G: 9.81 m/s²</div>
-    </footer>
+    </div> 
 
     <script>
-        // Constants & Config
-        const G = 9.81;
-        const PX_PER_METER = 10;
-        const GROUND_Y_OFFSET = 80;
-        const DT = 0.016; 
-
-        // State
-        let isRunning = false;
-        let time = 0;
-        let ball = { x: 0, y: 0, vx: 0, vy: 0, trail: [] };
-        let idealTrail = [];
-        let maxHFound = 0;
-
-        // Elements
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const simContainer = document.getElementById('sim-container');
-        
-        // Chart
-        const chartCtx = document.getElementById('chartCanvas').getContext('2d');
-        let chart;
-
-        // Inputs
-        const getVal = (id) => parseFloat(document.getElementById(id).value);
-        const updateText = (id, val, suffix) => document.getElementById('val-'+id).innerText = val + suffix;
-
-        function initChart() {
-            chart = new Chart(chartCtx, {
-                type: 'line',
-                data: {
-                    datasets: [
-                        { label: 'Thực tế', borderColor: '#f44336', borderWidth: 2, pointRadius: 0, data: [] },
-                        { label: 'Lý tưởng', borderColor: '#94a3b8', borderWidth: 1, borderDash: [5,5], pointRadius: 0, data: [] }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
-                    scales: {
-                        x: { type: 'linear', title: { display: true, text: 'X (m)', font: { size: 9 } } },
-                        y: { type: 'linear', title: { display: true, text: 'Y (m)', font: { size: 9 } } }
-                    },
-                    plugins: { legend: { labels: { font: { size: 8 } } } }
-                }
-            });
-        }
-
-        function calculateIdeal() {
-            const angleDeg = getVal('angle');
-            const v0 = getVal('v0');
-            const h = getVal('h');
-            const rad = angleDeg * Math.PI / 180;
-            
-            const vx = v0 * Math.cos(rad);
-            const vy = -v0 * Math.sin(rad);
-
-            idealTrail = [];
-            let t = 0;
-            for(let i=0; i<600; i++) {
-                const tx = vx * t;
-                const ty = vy * t + 0.5 * G * t * t;
-                idealTrail.push({x: tx, y: -ty});
-                if (ty > h && t > 0) break;
-                t += 0.05;
-            }
-            chart.data.datasets[1].data = idealTrail;
-            chart.update();
-        }
-
-        function reset() {
-            isRunning = false;
-            time = 0;
-            maxHFound = 0;
-            const v0 = getVal('v0');
-            const angleDeg = getVal('angle');
-            const rad = angleDeg * Math.PI / 180;
-
-            ball = {
-                x: 0, y: 0,
-                vx: v0 * Math.cos(rad),
-                vy: -v0 * Math.sin(rad),
-                trail: [{x: 0, y: 0}]
-            };
-
-            document.getElementById('stat-range').innerText = "0.00";
-            document.getElementById('stat-height').innerText = "0.00";
-            document.getElementById('stat-time').innerText = "0.00";
-            
-            document.getElementById('startBtnMain').innerText = "BẮN!";
-            document.getElementById('startBtnSub').innerText = "Khai hỏa";
-            document.getElementById('statusDot').classList.replace('bg-amber-500', 'bg-emerald-500');
-
-            chart.data.datasets[0].data = [];
-            calculateIdeal();
-            draw();
-        }
-
-        function physics() {
-            if (!isRunning) return;
-
-            const m = getVal('mass');
-            const k = getVal('dragK');
-            const h = getVal('h');
-
-            const ax = -(k/m) * ball.vx;
-            const ay = G - (k/m) * ball.vy;
-
-            ball.vx += ax * DT;
-            ball.vy += ay * DT;
-            ball.x += ball.vx * DT;
-            ball.y += ball.vy * DT;
-
-            time += DT;
-            ball.trail.push({x: ball.x, y: ball.y});
-
-            // Update stats
-            maxHFound = Math.max(maxHFound, -ball.y);
-            document.getElementById('stat-range').innerText = ball.x.toFixed(2);
-            document.getElementById('stat-height').innerText = Math.max(0, maxHFound).toFixed(2);
-            document.getElementById('stat-time').innerText = time.toFixed(2);
-
-            // Chart update throttling
-            if (Math.floor(time/DT) % 4 === 0) {
-                chart.data.datasets[0].data.push({x: ball.x, y: -ball.y});
-                chart.update('none');
-            }
-
-            // Impact
-            if (ball.y >= h) {
-                ball.y = h;
-                isRunning = false;
-                document.getElementById('startBtnMain').innerText = "LẠI?";
-                document.getElementById('startBtnSub').innerText = "Kết thúc";
-            }
-        }
-
-        function draw() {
-            const w = canvas.width;
-            const hCanvas = canvas.height;
-            const groundY = hCanvas - GROUND_Y_OFFSET;
-            const hInput = getVal('h');
-            const angleDeg = getVal('angle');
-            const rad = angleDeg * Math.PI / 180;
-
-            const cannonX = 80;
-            const cannonY = groundY - hInput * PX_PER_METER;
-
-            ctx.clearRect(0, 0, w, hCanvas);
-
-            // Grass & Land
-            ctx.fillStyle = '#27ae60'; ctx.fillRect(0, groundY, w, 20);
-            ctx.fillStyle = '#8b4513'; ctx.fillRect(0, groundY + 20, w, GROUND_Y_OFFSET);
-
-            // Cannon
-            ctx.fillStyle = '#475569'; ctx.fillRect(cannonX-10, cannonY, 20, groundY - cannonY);
-            
-            ctx.save();
-            ctx.translate(cannonX, cannonY);
-            ctx.rotate(-rad);
-            
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(0, -12, 55, 24);
-            ctx.fillStyle = '#64748b'; ctx.beginPath(); ctx.arc(0,0,16,0,Math.PI*2); ctx.fill();
-            ctx.restore();
-
-            // Trails
-            ctx.beginPath(); ctx.setLineDash([8,8]); ctx.strokeStyle='rgba(0,0,0,0.15)';
-            idealTrail.forEach((p, i) => {
-                const px = cannonX + p.x * PX_PER_METER;
-                const py = cannonY - p.y * PX_PER_METER;
-                if(i===0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-            });
-            ctx.stroke(); ctx.setLineDash([]);
-
-            ctx.beginPath(); ctx.strokeStyle='#f44336'; ctx.lineWidth=3;
-            ball.trail.forEach((p, i) => {
-                const px = cannonX + p.x * PX_PER_METER;
-                const py = cannonY + p.y * PX_PER_METER;
-                if(i===0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-            });
-            ctx.stroke();
-
-            // Ball
-            if (isRunning || ball.trail.length > 1) {
-                const bx = cannonX + ball.x * PX_PER_METER;
-                const by = cannonY + ball.y * PX_PER_METER;
-                ctx.beginPath(); ctx.arc(bx, by, 8, 0, Math.PI*2);
-                ctx.fillStyle='#222'; ctx.fill();
-                ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
-            }
-
-            if(isRunning) physics();
-            requestAnimationFrame(draw);
-        }
-
-        // Setup Events
-        function setup() {
-            canvas.width = simContainer.clientWidth;
-            canvas.height = simContainer.clientHeight;
-            lucide.createIcons();
-            initChart();
-            reset();
-
-            document.getElementById('angle').oninput = (e) => { updateText('angle', e.target.value, '°'); reset(); };
-            document.getElementById('v0').oninput = (e) => { updateText('v0', e.target.value, ' m/s'); reset(); };
-            document.getElementById('h').oninput = (e) => { updateText('h', e.target.value, ' m'); reset(); };
-            
-            document.getElementById('startBtn').onclick = () => {
-                if (!isRunning) {
-                    reset();
-                    isRunning = true;
-                    document.getElementById('startBtnMain').innerText = "DỪNG";
-                    document.getElementById('startBtnSub').innerText = "Đang bắn";
-                    document.getElementById('statusDot').classList.replace('bg-emerald-500', 'bg-amber-500');
-                } else {
-                    isRunning = false;
-                    document.getElementById('startBtnMain').innerText = "TIẾP?";
-                }
-            };
-
-            document.getElementById('resetBtn').onclick = reset;
-            window.onresize = () => {
-                canvas.width = simContainer.clientWidth;
-                canvas.height = simContainer.clientHeight;
-                reset();
-            }
-        }
-
-        function checkQuiz(correct, btn) {
-            document.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('border-emerald-500', 'bg-emerald-50', 'font-bold'));
-            if (correct) {
-                btn.classList.add('border-emerald-500', 'bg-emerald-50', 'font-bold');
-                document.getElementById('quizFeedback').classList.remove('hidden');
-            } else {
-                document.getElementById('quizFeedback').classList.add('hidden');
-            }
-        }
-
+        const G = 9.81; const PX_PER_METER = 10; const GROUND_Y_OFFSET = 80; const DT = 0.016; let isRunning = false; let time = 0; let ball = { x: 0, y: 0, vx: 0, vy: 0, trail: [] }; let idealTrail = []; let maxHFound = 0; const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); const simContainer = document.getElementById('sim-container'); const chartCtx = document.getElementById('chartCanvas').getContext('2d'); let chart; const getVal = (id) => parseFloat(document.getElementById(id).value); const updateText = (id, val, suffix) => document.getElementById('val-'+id).innerText = val + suffix;
+        function initChart() { chart = new Chart(chartCtx, { type: 'line', data: { datasets: [ { label: 'Thực tế', borderColor: '#f44336', borderWidth: 2, pointRadius: 0, data: [] }, { label: 'Lý tưởng', borderColor: '#94a3b8', borderWidth: 1, borderDash: [5,5], pointRadius: 0, data: [] } ] }, options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { x: { type: 'linear', title: { display: true, text: 'X (m)', font: { size: 9 } } }, y: { type: 'linear', title: { display: true, text: 'Y (m)', font: { size: 9 } } } }, plugins: { legend: { labels: { font: { size: 8 } } } } } }); }
+        function calculateIdeal() { const angleDeg = getVal('angle'); const v0 = getVal('v0'); const h = getVal('h'); const rad = angleDeg * Math.PI / 180; const vx = v0 * Math.cos(rad); const vy = -v0 * Math.sin(rad); idealTrail = []; let t = 0; for(let i=0; i<600; i++) { const tx = vx * t; const ty = vy * t + 0.5 * G * t * t; idealTrail.push({x: tx, y: -ty}); if (ty > h && t > 0) break; t += 0.05; } chart.data.datasets[1].data = idealTrail; chart.update(); }
+        function reset() { isRunning = false; time = 0; maxHFound = 0; const v0 = getVal('v0'); const angleDeg = getVal('angle'); const rad = angleDeg * Math.PI / 180; ball = { x: 0, y: 0, vx: v0 * Math.cos(rad), vy: -v0 * Math.sin(rad), trail: [{x: 0, y: 0}] }; document.getElementById('stat-range').innerText = "0.00"; document.getElementById('stat-height').innerText = "0.00"; document.getElementById('stat-time').innerText = "0.00"; document.getElementById('startBtnMain').innerText = "BẮN!"; document.getElementById('startBtnSub').innerText = "Khai hỏa"; document.getElementById('statusDot').classList.replace('bg-amber-500', 'bg-emerald-500'); chart.data.datasets[0].data = []; calculateIdeal(); draw(); }
+        function physics() { if (!isRunning) return; const m = getVal('mass'); const k = getVal('dragK'); const h = getVal('h'); const ax = -(k/m) * ball.vx; const ay = G - (k/m) * ball.vy; ball.vx += ax * DT; ball.vy += ay * DT; ball.x += ball.vx * DT; ball.y += ball.vy * DT; time += DT; ball.trail.push({x: ball.x, y: ball.y}); maxHFound = Math.max(maxHFound, -ball.y); document.getElementById('stat-range').innerText = ball.x.toFixed(2); document.getElementById('stat-height').innerText = Math.max(0, maxHFound).toFixed(2); document.getElementById('stat-time').innerText = time.toFixed(2); if (Math.floor(time/DT) % 4 === 0) { chart.data.datasets[0].data.push({x: ball.x, y: -ball.y}); chart.update('none'); } if (ball.y >= h) { ball.y = h; isRunning = false; document.getElementById('startBtnMain').innerText = "LẠI?"; document.getElementById('startBtnSub').innerText = "Kết thúc"; } }
+        function draw() { const w = canvas.width; const hCanvas = canvas.height; const groundY = hCanvas - GROUND_Y_OFFSET; const hInput = getVal('h'); const angleDeg = getVal('angle'); const rad = angleDeg * Math.PI / 180; const cannonX = 80; const cannonY = groundY - hInput * PX_PER_METER; ctx.clearRect(0, 0, w, hCanvas); ctx.fillStyle = '#27ae60'; ctx.fillRect(0, groundY, w, 20); ctx.fillStyle = '#8b4513'; ctx.fillRect(0, groundY + 20, w, GROUND_Y_OFFSET); ctx.fillStyle = '#475569'; ctx.fillRect(cannonX-10, cannonY, 20, groundY - cannonY); ctx.save(); ctx.translate(cannonX, cannonY); ctx.rotate(-rad); ctx.fillStyle = '#1e293b'; ctx.fillRect(0, -12, 55, 24); ctx.fillStyle = '#64748b'; ctx.beginPath(); ctx.arc(0,0,16,0,Math.PI*2); ctx.fill(); ctx.restore(); ctx.beginPath(); ctx.setLineDash([8,8]); ctx.strokeStyle='rgba(0,0,0,0.15)'; idealTrail.forEach((p, i) => { const px = cannonX + p.x * PX_PER_METER; const py = cannonY - p.y * PX_PER_METER; if(i===0) ctx.moveTo(px, py); else ctx.lineTo(px, py); }); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.strokeStyle='#f44336'; ctx.lineWidth=3; ball.trail.forEach((p, i) => { const px = cannonX + p.x * PX_PER_METER; const py = cannonY + p.y * PX_PER_METER; if(i===0) ctx.moveTo(px, py); else ctx.lineTo(px, py); }); ctx.stroke(); if (isRunning || ball.trail.length > 1) { const bx = cannonX + ball.x * PX_PER_METER; const by = cannonY + ball.y * PX_PER_METER; ctx.beginPath(); ctx.arc(bx, by, 8, 0, Math.PI*2); ctx.fillStyle='#222'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); } if(isRunning) physics(); requestAnimationFrame(draw); }
+        function setup() { canvas.width = simContainer.clientWidth; canvas.height = simContainer.clientHeight; lucide.createIcons(); initChart(); reset(); document.getElementById('angle').oninput = (e) => { updateText('angle', e.target.value, '°'); reset(); }; document.getElementById('v0').oninput = (e) => { updateText('v0', e.target.value, ' m/s'); reset(); }; document.getElementById('h').oninput = (e) => { updateText('h', e.target.value, ' m'); reset(); }; document.getElementById('startBtn').onclick = () => { if (!isRunning) { reset(); isRunning = true; document.getElementById('startBtnMain').innerText = "DỪNG"; document.getElementById('startBtnSub').innerText = "Đang bắn"; document.getElementById('statusDot').classList.replace('bg-emerald-500', 'bg-amber-500'); } else { isRunning = false; document.getElementById('startBtnMain').innerText = "TIẾP?"; } }; document.getElementById('resetBtn').onclick = reset; window.onresize = () => { canvas.width = simContainer.clientWidth; canvas.height = simContainer.clientHeight; reset(); } }
+        function checkQuiz(correct, btn) { document.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('border-emerald-500', 'bg-emerald-50', 'font-bold')); if (correct) { btn.classList.add('border-emerald-500', 'bg-emerald-50', 'font-bold'); document.getElementById('quizFeedback').classList.remove('hidden'); } else { document.getElementById('quizFeedback').classList.add('hidden'); } }
         window.onload = setup;
     </script>
+    <script src="chat.js"></script>
 </body>
 </html>
 
