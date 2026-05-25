@@ -1,4 +1,3 @@
-// File: api/gemini-handler.js
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
 // Lấy API Key đã giấu trên Vercel
@@ -23,10 +22,13 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Question is required' });
     }
 
-const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+
+    // Yêu cầu AI trả lời kèm ép buộc định dạng Toán học (SỬA Ở ĐÂY)
+    const prompt = `Bạn là một trợ giảng Vật lý ảo. Hãy trả lời câu hỏi sau của học sinh một cách ngắn gọn, dễ hiểu. QUAN TRỌNG: Tất cả các công thức, ký hiệu Toán học và Vật lý BẮT BUỘC phải được bọc trong cặp dấu $...$ (ví dụ: $d_2 - d_1 = k\\lambda$) hoặc $$...$$. Câu hỏi: ${question}`;
 
     // Gọi Gemini
-    const result = await model.generateContent(question);
+    const result = await model.generateContent(prompt);
     const response = await result.response;
 
     // Kiểm tra xem có bị chặn vì lý do an toàn không
