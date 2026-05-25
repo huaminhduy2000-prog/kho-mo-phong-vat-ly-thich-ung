@@ -85,6 +85,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         chatWindow.appendChild(msg);
         chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        // KÍCH HOẠT MATHJAX ĐỂ DỊCH CÔNG THỨC TOÁN HỌC
+        if (sender === "ai" && window.MathJax) {
+            MathJax.typesetPromise([msg]).catch(function (err) {
+                console.error("Lỗi hiển thị Toán học:", err.message);
+            });
+        }
     }
 
     function showTypingIndicator() {
