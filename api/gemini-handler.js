@@ -22,8 +22,8 @@ export default async function handler(req, res) {
     if (!question) {
       return res.status(400).json({ error: 'Question is required' });
     }
-   // Chọn model (thử gemini-2.0-flash-lite)
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" }); // <-- Đổi sang flash-lite mới
+   // Chọn model 
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
     // Gọi Gemini
     const result = await model.generateContent(question);
